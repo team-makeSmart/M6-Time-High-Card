@@ -2,8 +2,8 @@
  * @author Hunter Mason, Jake McGhee, Mac Doussias, Pavlos Papadonikolakis
  * CLASS CST 338
  * Team MakeSmart
- * Assignment 6, Module 6
- * PHASE 1
+ * Assignment 5, Module 5
+ * PHASE 3
  */
 
 import java.awt.BorderLayout;
@@ -540,7 +540,7 @@ public class Phase1
             Phase1.exitButton.setVisible(false);
             Phase1.score[1] = 0;
             Phase1.score[0] = 0;
-
+            computerPlaysFirst = true;
             Phase1.startTheGame();
 
          }
