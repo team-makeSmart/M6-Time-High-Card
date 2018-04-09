@@ -1775,15 +1775,6 @@ class MyClock extends JFrame
    // clock, else false to not have the clock run
    TimeClock clockThread = new TimeClock(); // Make time thread object
 
-   /**
-    * Main function implements program
-    */
-   public static void main(String[] args)
-   {
-      MyClock gui = new MyClock();
-      gui.setVisible(true);
-   }
-
    // ---------- Listener class designed for TimeClock objects ----------------
    private class runTimerListener implements ActionListener
    {
