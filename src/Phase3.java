@@ -91,7 +91,7 @@ public class Phase3
        */
       private static void setFrame()
       {
-         myCardTable = new CardView.CardTable("High Card", NUM_CARDS_PER_HAND, NUM_PLAYERS);
+         myCardTable = new CardView.CardTable("Build Card Game", NUM_CARDS_PER_HAND, NUM_PLAYERS);
          myCardTable.setSize(800, 850);
          myCardTable.setLayout(new GridLayout(4, 0, 0, 0));
          myCardTable.add(getBottomPanel());
