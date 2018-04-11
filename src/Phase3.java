@@ -595,7 +595,7 @@ public class Phase3
 
          
          // button to skip turn
-         skipButton = new JButton("Skip");
+         skipButton = new JButton("I cannot play");
          skipButton.setPreferredSize(new Dimension(120, 20));
          subUpper.add(skipButton, BorderLayout.EAST);
          skipButton.addActionListener(new java.awt.event.ActionListener()
