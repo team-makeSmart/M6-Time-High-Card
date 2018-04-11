@@ -1,10 +1,24 @@
-
 /**
  * @author Hunter Mason, Jake McGhee, Mac Doussias, Pavlos Papadonikolakis
  * CLASS CST 338
  * Team MakeSmart
  * Assignment 6, Module 6
  * PHASE 2 MVC
+ * 
+ * PROGRAM DESCRIPTION
+ * 
+ * GAME NAME : BUILD 
+ * 
+ * RULES:  The player can put down a card that is one less or one more than 
+ * the value of the cards on the table.  Each time the player places a card, 
+ * he/she earns a point.  
+ * 
+ * WIN CONDITION:  The player that presses the "I Cannot Play" button the least 
+ * wins the game. This is determined by the player that has the most points 
+ * left at end of game.
+ * 
+ * SPECIAL NOTE: Each time a player plays a card, they get a point.  So if they 
+ * skip their turn, they end up not accumulating points. 
  */
 
 import java.awt.BorderLayout;
@@ -25,8 +39,7 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-
-//--------------------Phase1 creates a MVC pattern----------------------
+//---------------------- BEGIN PHASE1 -----------------------------------
 //
 //Phase1 includes classes: Controller, CardView, CardModel
 public class Phase3
@@ -40,8 +53,10 @@ public class Phase3
       CardModel.Card[] unusedCardsPerPack = null;
 
       // instantiate the CardGameFramework, used for gameplay
-      Controller.buildCardGame = new Controller.CardGameFramework(numPacksPerDeck, numJokersPerPack,
-            numUnusedCardsPerPack, unusedCardsPerPack, Controller.NUM_PLAYERS, Controller.NUM_CARDS_PER_HAND);
+      Controller.buildCardGame = new Controller.CardGameFramework(
+         numPacksPerDeck, numJokersPerPack, numUnusedCardsPerPack,
+         unusedCardsPerPack, Controller.NUM_PLAYERS,
+         Controller.NUM_CARDS_PER_HAND);
 
       // establish main GUI frame in which the program will run
       Controller.setFrame();
@@ -51,8 +66,7 @@ public class Phase3
    // -----------------------------------------------------------------
    // -----------------------------------------------------------------
    // -----------------------------------------------------------------
-   // --------------------start of class
-   // Controller-----------------------------------------
+   // --------------------start of class Controller--------------------
 
    // class Controller controls the game
    static class Controller
@@ -66,7 +80,8 @@ public class Phase3
       private static JLabel[] playedCardLabels = new JLabel[NUM_PLAYERS];
       private static String[] playerNames =
       { "Computer", "You" };
-      private static CardModel.Card[] cardPlayed = new CardModel.Card[NUM_PLAYERS];
+      private static CardModel.Card[] cardPlayed = 
+         new CardModel.Card[NUM_PLAYERS];
       private static int[] score =
       { 0, 0 };
       private static boolean[] playableStacks =
@@ -91,7 +106,8 @@ public class Phase3
        */
       private static void setFrame()
       {
-         myCardTable = new CardView.CardTable("Build Card Game", NUM_CARDS_PER_HAND, NUM_PLAYERS);
+         myCardTable = new CardView.CardTable("Build Card Game",
+            NUM_CARDS_PER_HAND, NUM_PLAYERS);
          myCardTable.setSize(800, 850);
          myCardTable.setLayout(new GridLayout(4, 0, 0, 0));
          myCardTable.add(getBottomPanel());
@@ -102,23 +118,24 @@ public class Phase3
 
       static void UpdatePlayedCardsGUI()
       {
-         
-         
-         
+
          // update GUI
          for (int i = 0; i < cardPlayed.length; i++)
          {
             if (cardPlayed[i] != null)
             {
-               playedCardLabels[i].setIcon(CardView.GUICard.getIcon(cardPlayed[i]));
+               playedCardLabels[i]
+                  .setIcon(CardView.GUICard.getIcon(cardPlayed[i]));
                playedCardLabels[i].setHorizontalTextPosition(JLabel.CENTER);
                playedCardLabels[i].setVerticalTextPosition(JLabel.BOTTOM);
                playedCardLabels[i].setOpaque(true);
 
-               if (!playableStacks[i] || selectedCard == null || selectedCardIndex <= -1)
+               if (!playableStacks[i] || selectedCard == null
+                  || selectedCardIndex <= -1)
                {
                   playedCardLabels[i].setBackground(new Color(238, 238, 238));
-               } else
+               } 
+               else
                {
                   playedCardLabels[i].setBackground(new Color(127, 255, 127));
                }
@@ -145,11 +162,12 @@ public class Phase3
          {
             // fill the arrays with cards
             computerLabels[i] = new JLabel(CardView.GUICard.getBackCardIcon());
-            // (uncomment to view computer hand)
-            // computerLabels[i] = new
-            // JLabel(GUICard.getIcon((highCardGame.getHand(0).inspectCard(i))));
+            //(uncomment to view computer hand)
+            //computerLabels[i] = new
+            //JLabel(GUICard.getIcon((highCardGame.getHand(0).inspectCard(i))));
 
-            humanLabels[i] = new JLabel(CardView.GUICard.getIcon((buildCardGame.getHand(1).inspectCard(i))));
+            humanLabels[i] = new JLabel(CardView.GUICard
+               .getIcon((buildCardGame.getHand(1).inspectCard(i))));
 
             // add the back cards for the computer and the cards for the hand
             myCardTable.pnlComputerHand.add(computerLabels[i]);
@@ -169,8 +187,8 @@ public class Phase3
          // Add cards and score to the GUI
          for (int i = 0; i < NUM_PLAYERS; i++)
          {
-            String playedCardText = "<html><div style='text-align: center;'>" + playerNames[i] + "<br/>Score: "
-                  + score[i];
+            String playedCardText = "<html><div style='text-align: center;'>"
+               + playerNames[i] + "<br/>Score: " + score[i];
             // add cards for each player
             playedCardLabels[i] = new JLabel(playedCardText);
             playedCardLabels[i].setBorder(new EmptyBorder(0, 0, 20, 0));
@@ -230,40 +248,44 @@ public class Phase3
 
             if (selectedCard != null && selectedCardIndex > -1)
             {
-               for(int i = 0; i < playedCardLabels.length; i++)
+               for (int i = 0; i < playedCardLabels.length; i++)
                {
                   if (e.getSource() == playedCardLabels[i] && playableStacks[i])
                   {
                      // temporarily make the other cards unclickable
                      cardsClickable = false;
                      skipButton.setEnabled(false);
-   
+
                      // play the card
                      buildCardGame.getHand(1).playCard(selectedCardIndex);
-                     
+
                      // add the card to the playing area
                      cardPlayed[i] = selectedCard;
-                     
+
                      // remove the card from the hand
                      removeGUICard(1, selectedCard, false);
-                     
+
                      // draw another card.
                      CardModel.Card dealtCard = buildCardGame.deck.dealCard();
 
-                     if(dealtCard != null)
+                     if (dealtCard != null)
                      {
                         buildCardGame.getHand(1).takeCard(dealtCard);
-                        humanLabels[buildCardGame.getHand(1).getNumOfCards()-1].setIcon(CardView.GUICard.getIcon(dealtCard));
-                        
-                     } else {
-                        humanLabels[buildCardGame.getHand(1).getNumOfCards()-1].setIcon(null);
+                        humanLabels[buildCardGame.getHand(1).getNumOfCards()
+                           - 1].setIcon(CardView.GUICard.getIcon(dealtCard));
+
+                     } 
+                     else
+                     {
+                        humanLabels[buildCardGame.getHand(1).getNumOfCards()
+                           - 1].setIcon(null);
                      }
 
                      selectedCard = null;
                      selectedCardIndex = -1;
-                     
+
                      UpdatePlayedCardsGUI();
-                     
+
                      // Add listener to new card on stack
                      playedCardLabels[i].addMouseListener(new MouseAdapter()
                      {
@@ -273,10 +295,9 @@ public class Phase3
                            onMouseClicked(e);
                         }
                      });
-                     
-                     
+
                      // begin computer's turn
-                     
+
                      // creates a delay of one second
                      final int ONE_SECOND = 1000;
                      Timer timer = new Timer(ONE_SECOND, new ActionListener()
@@ -284,7 +305,7 @@ public class Phase3
                         public void actionPerformed(ActionEvent e)
                         {
                            checkWinner(1, false);
-                           //computerPlayCard();
+                           // computerPlayCard();
                         }
                      });
 
@@ -293,13 +314,14 @@ public class Phase3
                      timer.start();
                   }
                }
-            } else 
+            } 
+            else
             {
                System.out.println("No card selected.");
             }
          }
-         //System.out.println(buildCardGame.getHand(1).toString());
-         
+         // System.out.println(buildCardGame.getHand(1).toString());
+
       }
 
       /**
@@ -309,27 +331,31 @@ public class Phase3
        */
       private static int[] computerChooseCard()
       {
-         
+
          int firstStackRank = CardModel.Card.valueAsInt(cardPlayed[0]);
          int secondStackRank = CardModel.Card.valueAsInt(cardPlayed[1]);
-         
+
          int stackIndex = -1;
          int cardIndex = -1;
-         
-         for(int i = 0; i < buildCardGame.getHand(0).getNumOfCards(); i++) {
-            int currentRank = CardModel.Card.valueAsInt(buildCardGame.getHand(0).inspectCard(i));
-            if(Math.abs(currentRank - firstStackRank) == 1)
+
+         for (int i = 0; i < buildCardGame.getHand(0).getNumOfCards(); i++)
+         {
+            int currentRank = CardModel.Card
+               .valueAsInt(buildCardGame.getHand(0).inspectCard(i));
+            if (Math.abs(currentRank - firstStackRank) == 1)
             {
                cardIndex = i;
                stackIndex = 0;
-            } else if(Math.abs(currentRank - secondStackRank) == 1)
+            } 
+            else if (Math.abs(currentRank - secondStackRank) == 1)
             {
                cardIndex = i;
                stackIndex = 1;
             }
          }
-         
-         return new int[] {cardIndex, stackIndex};
+
+         return new int[]
+         { cardIndex, stackIndex };
       }
 
       /**
@@ -338,50 +364,57 @@ public class Phase3
       private static void computerPlayCard()
       {
          int[] optimalPlay = computerChooseCard();
-         
-         if(optimalPlay[0] > -1 && optimalPlay[1] > -1)
+
+         if (optimalPlay[0] > -1 && optimalPlay[1] > -1)
          {
-            CardModel.Card card = buildCardGame.getHand(0).inspectCard(optimalPlay[0]);
+            CardModel.Card card = buildCardGame.getHand(0)
+               .inspectCard(optimalPlay[0]);
 
             // set the card
             card = buildCardGame.playCard(0, optimalPlay[0]);
             System.out.println("Optimal play: " + card.toString());
             // play the card
             cardPlayed[optimalPlay[1]] = card;
-            
+
             // remove the card from the hand
             removeGUICard(0, card, true);
-            
-            if(buildCardGame.deck.getNumCards() > 0) {
+
+            if (buildCardGame.deck.getNumCards() > 0)
+            {
                CardModel.Card dealtCard = buildCardGame.deck.dealCard();
                buildCardGame.getHand(0).takeCard(dealtCard);
-               
+
                boolean done = false;
-               for(int i = 0; i < computerLabels.length; i++)
+               for (int i = 0; i < computerLabels.length; i++)
                {
-                  if(!done && computerLabels[i].getIcon() == null)
+                  if (!done && computerLabels[i].getIcon() == null)
                   {
-                     computerLabels[i].setIcon(CardView.GUICard.getBackCardIcon());
+                     computerLabels[i]
+                        .setIcon(CardView.GUICard.getBackCardIcon());
                      done = true;
                   }
                }
             }
-            
+
             UpdatePlayedCardsGUI();
             checkWinner(0, false);
-         } else {
-            
+         } 
+         else
+         {
+
             System.out.println("Computer skipped a turn.");
             // skip turn
             UpdatePlayedCardsGUI();
             checkWinner(0, true);
          }
-         
+
          System.out
-               .println("\nAI Hand: " + buildCardGame.getHand(0).getNumOfCards() + buildCardGame.getHand(0).toString());
+            .println("\nAI Hand: " + buildCardGame.getHand(0).getNumOfCards()
+               + buildCardGame.getHand(0).toString());
       }
 
-      private static void removeGUICard(int playerID, CardModel.Card card, boolean isHidden)
+      private static void removeGUICard(int playerID, CardModel.Card card,
+         boolean isHidden)
       {
          Icon removeIcon = CardView.GUICard.getBackCardIcon();
 
@@ -405,32 +438,35 @@ public class Phase3
                   }
                }
             }
-         } else if (playerID == 1)
+         } 
+         else if (playerID == 1)
          {
             int removalIndex = -1;
             for (int i = 0; i < humanLabels.length; i++)
             {
                if (humanLabels[i].getIcon() != null)
                {
-                  if (humanLabels[i].getIcon().toString().equals(removeIcon.toString()))
+                  if (humanLabels[i].getIcon().toString()
+                     .equals(removeIcon.toString()))
                   {
                      removalIndex = i;
                   }
                }
-               
-               if(removalIndex > -1 && i < humanLabels.length-1)
+
+               if (removalIndex > -1 && i < humanLabels.length - 1)
                {
-                  if(i == humanLabels.length)
+                  if (i == humanLabels.length)
                   {
                      humanLabels[i].setIcon(CardView.GUICard.getIcon(card));
-                  } else
+                  } 
+                  else
                   {
-                     humanLabels[i].setIcon(humanLabels[i+1].getIcon());
+                     humanLabels[i].setIcon(humanLabels[i + 1].getIcon());
                   }
                }
-               
+
             }
-            
+
          }
       }
 
@@ -449,7 +485,8 @@ public class Phase3
             if (humanLabels[labelIndex].getIcon() != null)
             {
                Icon boardIcon = humanLabels[labelIndex].getIcon();
-               Icon handIcon = CardView.GUICard.getIcon(buildCardGame.getHand(1).inspectCard(i));
+               Icon handIcon = CardView.GUICard
+                  .getIcon(buildCardGame.getHand(1).inspectCard(i));
                if (boardIcon.toString().equals(handIcon.toString()))
                {
                   return i;
@@ -461,89 +498,92 @@ public class Phase3
       }
 
       /**
-       * When both cards (computer and human) have been played, checks for a winner,
-       * updates scores, and resets the playing area
+       * When both cards (computer and human) have been played, checks for a
+       * winner, updates scores, and resets the playing area
        */
       private static void checkWinner(int playerID, boolean skipped)
       {
-         
 
-         
          // make sure both cards have been played
          if (skipped)
          {
             skipCounter++;
-            
+
             // deal a new card to each stack if skip limit is reached.
             if (skipCounter >= SKIP_LIMIT)
             {
-               System.out.println("Skip limit reached, dealing new cards to the stacks.");
+               System.out.println(
+                  "Skip limit reached, dealing new cards to the stacks.");
                skipCounter = 0;
-               for(int i = 0 ; i < cardPlayed.length; i++)
+               for (int i = 0; i < cardPlayed.length; i++)
                {
-                  if(buildCardGame.getNumCardsRemainingInDeck() > 0)
+                  if (buildCardGame.getNumCardsRemainingInDeck() > 0)
                   {
                      CardModel.Card dealtCard = buildCardGame.deck.dealCard();
                      cardPlayed[i] = dealtCard;
-                  } else {
+                  } 
+                  else
+                  {
                      UpdatePlayedCardsGUI();
                      displayWinner();
                   }
                }
-               
+
                UpdatePlayedCardsGUI();
             }
-         } else
+         } 
+         else
          {
             // Award points for not skipping
             score[playerID]++;
             skipCounter = 0;
          }
-         
+
          gameIndex++;
-         
-         System.out.println(buildCardGame.getNumCardsRemainingInDeck() + " cards remain.");
-         
-         
+
+         System.out.println(
+            buildCardGame.getNumCardsRemainingInDeck() + " cards remain.");
+
          // reset both played cards
          for (int i = 0; i < NUM_PLAYERS; i++)
          {
-            playedCardText = "<html><div style='text-align: center;'>" + playerNames[i] + "<br/>Score: "
-                  + score[i];
+            playedCardText = "<html><div style='text-align: center;'>"
+               + playerNames[i] + "<br/>Score: " + score[i];
             playedCardLabels[i].setText(playedCardText);
             playedCardLabels[i].setBorder(new EmptyBorder(0, 0, 20, 0));
             playedCardLabels[i].setHorizontalAlignment(JLabel.CENTER);
             playedCardLabels[i].setVerticalAlignment(JLabel.BOTTOM);
          }
-         
-         
-         if(buildCardGame.getNumCardsRemainingInDeck() <= 0)
+
+         if (buildCardGame.getNumCardsRemainingInDeck() <= 0)
          {
             displayWinner();
-         } else {
-        
+         } 
+         else
+         {
+
             final int TWO_SECONDS = 2000;
             Timer timer = new Timer(TWO_SECONDS, new ActionListener()
             {
                public void actionPerformed(ActionEvent e)
                {
-                  if(playerID == 1)
+                  if (playerID == 1)
                   {
                      computerPlayCard();
-                  } else {
+                  } 
+                  else
+                  {
                      // make the cards clickable again
                      cardsClickable = true;
                      skipButton.setEnabled(true);
                   }
-   
+
                }
             });
-            
+
             timer.setRepeats(false);
             timer.start();
          }
-         
-         
 
       }
 
@@ -568,7 +608,7 @@ public class Phase3
          // create an new object of CardView.DisplayWinner
          winner = new CardView.DisplayWinner(stringWinner);
          bottomPanel.add(winner, BorderLayout.CENTER);
-         
+
       }
 
       /**
@@ -586,14 +626,13 @@ public class Phase3
          subUpper.setLayout(new BorderLayout());
 
          subUpper.add(new MyClock(), BorderLayout.WEST);
-         
+
          subUpper.setBackground(Color.BLUE);
          bottomPanel.setBackground(Color.black);
          subBottom.setBackground(Color.BLUE);
          bottomPanel.add(subUpper, BorderLayout.NORTH);
          bottomPanel.add(subBottom, BorderLayout.SOUTH);
 
-         
          // button to skip turn
          skipButton = new JButton("I cannot play");
          skipButton.setPreferredSize(new Dimension(120, 20));
@@ -605,7 +644,7 @@ public class Phase3
                skipButtonAction(evt);
             }
          });
-         
+
          // button to restart the game
          restartButton = new JButton("Restart");
          restartButton.addActionListener(new java.awt.event.ActionListener()
@@ -640,7 +679,7 @@ public class Phase3
 
          return bottomPanel;
       }
-      
+
       /**
        * skips the player's turn
        * 
@@ -651,16 +690,17 @@ public class Phase3
       {
          cardsClickable = false;
          skipButton.setEnabled(false);
-         
+
          selectedCard = null;
          selectedCardIndex = -1;
-         
+
          UpdatePlayedCardsGUI();
          checkWinner(1, true);
       }
 
       /**
-       * replaces the current frame and 4 rows panel with new ones resets the scores
+       * replaces the current frame and 4 rows panel with new ones resets the
+       * scores
        * 
        * @param evt
        *           the event
@@ -710,18 +750,22 @@ public class Phase3
          private static final int MAX_PLAYERS = 50;
 
          private int numPlayers;
-         private int numPacks; // # standard 52-card packs per deck
-                               // ignoring jokers or unused cards
-         private int numJokersPerPack; // if 2 per pack & 3 packs per deck, get
-                                       // 6
+         // #standard 52-card packs per deck, ignoring jokers or unused cards
+         private int numPacks;
+
+         // If 2 per pack & 3 cards per deck, get 6
+         private int numJokersPerPack;
          private int numUnusedCardsPerPack; // # cards removed from each pack
          private int numCardsPerHand; // # cards to deal each player
-         private CardModel.Deck deck; // holds the initial full deck and gets
-         // smaller (usually) during play
+
+         // Holds the initial full deck and gets smaller (usually) during play
+         private CardModel.Deck deck;
+
          private CardModel.Hand[] hand; // one Hand for each player
-         private CardModel.Card[] unusedCardsPerPack; // an array holding the
-                                                      // cards
-                                                      // not used
+
+         // An array holding the cards not used
+         private CardModel.Card[] unusedCardsPerPack;
+
          // in the game. e.g. pinochle does not
          // use cards 2-8 of any suit
 
@@ -735,8 +779,9 @@ public class Phase3
           * @param numPlayers
           * @param numCardsPerHand
           */
-         public CardGameFramework(int numPacks, int numJokersPerPack, int numUnusedCardsPerPack,
-               CardModel.Card[] unusedCardsPerPack, int numPlayers, int numCardsPerHand)
+         public CardGameFramework(int numPacks, int numJokersPerPack,
+            int numUnusedCardsPerPack, CardModel.Card[] unusedCardsPerPack,
+            int numPlayers, int numCardsPerHand)
          {
             int k;
 
@@ -745,14 +790,17 @@ public class Phase3
                numPacks = 1;
             if (numJokersPerPack < 0 || numJokersPerPack > 4)
                numJokersPerPack = 0;
-            if (numUnusedCardsPerPack < 0 || numUnusedCardsPerPack > 50) // > 1
-                                                                         // card
+
+            // > 1 card
+            if (numUnusedCardsPerPack < 0 || numUnusedCardsPerPack > 50)
                numUnusedCardsPerPack = 0;
             if (numPlayers < 1 || numPlayers > MAX_PLAYERS)
                numPlayers = 4;
             // one of many ways to assure at least one full deal to all players
-            if (numCardsPerHand < 1 || numCardsPerHand > numPacks * (52 - numUnusedCardsPerPack) / numPlayers)
-               numCardsPerHand = numPacks * (52 - numUnusedCardsPerPack) / numPlayers;
+            if (numCardsPerHand < 1 || numCardsPerHand > numPacks
+               * (52 - numUnusedCardsPerPack) / numPlayers)
+               numCardsPerHand = numPacks * (52 - numUnusedCardsPerPack)
+                  / numPlayers;
 
             // allocate
             this.unusedCardsPerPack = new CardModel.Card[numUnusedCardsPerPack];
@@ -836,7 +884,8 @@ public class Phase3
             // add jokers
             for (k = 0; k < numPacks; k++)
                for (j = 0; j < numJokersPerPack; j++)
-                  deck.addCard(new CardModel.Card('X', CardModel.Card.Suit.values()[j]));
+                  deck.addCard(
+                     new CardModel.Card('X', CardModel.Card.Suit.values()[j]));
 
             // shuffle the cards
             deck.shuffle();
@@ -899,7 +948,8 @@ public class Phase3
          public CardModel.Card playCard(int playerIndex, int cardIndex)
          {
             // returns bad card if either argument is bad
-            if (playerIndex < 0 || playerIndex > numPlayers - 1 || cardIndex < 0 || cardIndex > numCardsPerHand - 1)
+            if (playerIndex < 0 || playerIndex > numPlayers - 1 || cardIndex < 0
+               || cardIndex > numCardsPerHand - 1)
             {
                // Creates a card that does not work
                return new CardModel.Card('M', CardModel.Card.Suit.SPADES);
@@ -913,7 +963,8 @@ public class Phase3
          public CardModel.Card selectCard(int playerIndex, int cardIndex)
          {
             // returns bad card if either argument is bad
-            if (playerIndex < 0 || playerIndex > numPlayers - 1 || cardIndex < 0 || cardIndex > numCardsPerHand - 1)
+            if (playerIndex < 0 || playerIndex > numPlayers - 1 || cardIndex < 0
+               || cardIndex > numCardsPerHand - 1)
             {
                // Creates a card that does not work
                return new CardModel.Card('M', CardModel.Card.Suit.SPADES);
@@ -924,10 +975,12 @@ public class Phase3
             // Compare value with stacks
             for (int i = 0; i < cardPlayed.length; i++)
             {
-               if (Math.abs(CardModel.Card.valueAsInt(card) - CardModel.Card.valueAsInt(cardPlayed[i])) == 1)
+               if (Math.abs(CardModel.Card.valueAsInt(card)
+                  - CardModel.Card.valueAsInt(cardPlayed[i])) == 1)
                {
                   playableStacks[i] = true;
-               } else
+               } 
+               else
                {
                   playableStacks[i] = false;
                }
@@ -953,9 +1006,9 @@ public class Phase3
    }
    // end of controller
 
-   // ______________________________________________________________________________
-   // ______________________________________________________________________________
-   // ______________________________________________________________________________
+   // ________________________________________________________________________
+   // ________________________________________________________________________
+   // ________________________________________________________________________
    // ____________________start of
    // CardView________________________________________________
    static class CardView
@@ -989,7 +1042,8 @@ public class Phase3
          {
             super(title);// set the title on the JFrame
 
-            if (numCardsPerHand > MAX_CARDS_PER_HAND || numPlayers > MAX_PLAYERS)
+            if (numCardsPerHand > MAX_CARDS_PER_HAND
+               || numPlayers > MAX_PLAYERS)
             {
                return;
             }
@@ -1001,23 +1055,27 @@ public class Phase3
             CardView.GUICard.loadCardIcons();
 
             // create a default Font style
-            UIManager.getDefaults().put("TitledBorder.font", (new Font("Arial", Font.BOLD, 14)));
+            UIManager.getDefaults().put("TitledBorder.font",
+               (new Font("Arial", Font.BOLD, 14)));
 
             // three rows zero columns layout, 10 pixels space
             setLayout(new GridLayout(3, 0, 10, 10));
 
             // create the three panels with title borders
             pnlComputerHand = new JPanel();
-            pnlComputerHand.setBorder(BorderFactory.createTitledBorder("Computer Hand"));
+            pnlComputerHand
+               .setBorder(BorderFactory.createTitledBorder("Computer Hand"));
 
             pnlPlayArea = new JPanel();
-            pnlPlayArea.setBorder(BorderFactory.createTitledBorder("Playing Area"));
+            pnlPlayArea
+               .setBorder(BorderFactory.createTitledBorder("Playing Area"));
 
             // Zero rows,numPlayers = columns
             pnlPlayArea.setLayout(new GridLayout(0, numPlayers, 10, 10));
 
             pnlHumanHand = new JPanel();
-            pnlHumanHand.setBorder(BorderFactory.createTitledBorder("Your Hand"));
+            pnlHumanHand
+               .setBorder(BorderFactory.createTitledBorder("Your Hand"));
 
             // add the panels to the JFrame
             add(pnlComputerHand);
@@ -1037,7 +1095,8 @@ public class Phase3
          public final static int NR_OF_SUITS = 4;
 
          // 14 = A thru K + joker
-         private static Icon[][] iconCards = new ImageIcon[NR_OF_VALUES][NR_OF_SUITS];
+         private static Icon[][] iconCards = 
+            new ImageIcon[NR_OF_VALUES][NR_OF_SUITS];
 
          private static Icon iconBack;
          static boolean iconsLoaded = false;
@@ -1048,7 +1107,8 @@ public class Phase3
             {
                iconsLoaded = true;
                return;
-            } else
+            } 
+            else
             {
                String inputFileName = "src/images/";
                String fileExtension = ".gif";
@@ -1058,7 +1118,8 @@ public class Phase3
                   for (int j = 0; j < iconCards[i].length; j++)
                   {
                      iconCards[i][j] = new ImageIcon(
-                           inputFileName + turnIntIntoCardValue(i) + turnIntIntoCardSuit(j) + fileExtension);
+                        inputFileName + turnIntIntoCardValue(i)
+                           + turnIntIntoCardSuit(j) + fileExtension);
                   }
                }
 
@@ -1068,13 +1129,14 @@ public class Phase3
 
             // testing
             System.out.println(iconBack);
-            System.out.println(getIcon(new CardModel.Card('4', CardModel.Card.Suit.CLUBS)));
+            System.out.println(
+               getIcon(new CardModel.Card('4', CardModel.Card.Suit.CLUBS)));
 
          }
 
          /**
-          * This method creates and returns an icon representing the values of the Card
-          * object received as an argument
+          * This method creates and returns an icon representing the values of
+          * the Card object received as an argument
           * 
           * @param card
           *           receives a card object
@@ -1082,7 +1144,8 @@ public class Phase3
           */
          public static Icon getIcon(CardModel.Card card)
          {
-            return iconCards[CardModel.Card.valueAsInt(card)][CardModel.Card.suitAsInt(card)];
+            return iconCards[CardModel.Card.valueAsInt(card)][CardModel.Card
+               .suitAsInt(card)];
          }
 
          /**
@@ -1105,7 +1168,8 @@ public class Phase3
          public static String turnIntIntoCardValue(int j)
          {
             String values[] =
-            { "A", "2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "X" };
+            { "A", "2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K",
+               "X" };
             return values[j];
          }
 
@@ -1155,7 +1219,8 @@ public class Phase3
             super.paint(g);
 
             Graphics2D g2 = (Graphics2D) g;
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+               RenderingHints.VALUE_ANTIALIAS_ON);
             Font font = new Font("Arial", Font.BOLD, 30);
             g2.setFont(font);
             g2.setColor(Color.red);
@@ -1164,7 +1229,8 @@ public class Phase3
             if (Controller.buildCardGame.getNumCardsRemainingInDeck() == 0)
             {
                g2.drawString(stringWinner + " Deck Empty Game Over", x, y);
-            } else // display who won
+            } 
+            else // display who won
             {
                g2.drawString(stringWinner, x, y);
             }
@@ -1172,9 +1238,11 @@ public class Phase3
             try
             {
                Thread.sleep(50);
-            } catch (InterruptedException ex)
+            } 
+            catch (InterruptedException ex)
             {
-               Logger.getLogger(DisplayWinner.class.getName()).log(Level.SEVERE, null, ex);
+               Logger.getLogger(DisplayWinner.class.getName()).log(Level.SEVERE,
+                  null, ex);
             }
             x += 10;
 
@@ -1192,7 +1260,8 @@ public class Phase3
                Controller.winner.setVisible(false);
                Controller.restartButton.setVisible(true);
                Controller.exitButton.setVisible(true);
-               Controller.getBottomPanel().add(Controller.buttonsPanel, BorderLayout.CENTER);
+               Controller.getBottomPanel().add(Controller.buttonsPanel,
+                  BorderLayout.CENTER);
                return;
             }
 
@@ -1201,11 +1270,10 @@ public class Phase3
       }
 
    }// end of CardView class
-    // _____________________________________________________________________________
-    // _____________________________________________________________________________
-    // _____________________________________________________________________________
-    // __________________start of
-    // CardModel_____________________________________________
+    // ________________________________________________________________________
+    // ________________________________________________________________________
+    // ________________________________________________________________________
+    // __________________start of CardModel____________________________________
 
    /**
     * 
@@ -1220,7 +1288,8 @@ public class Phase3
 
          /** Constant array of valid card values acceptable for program */
          public static final char[] valueRanks =
-         { 'A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'X' };
+         { 'A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K',
+            'X' };
 
          /**
           * Enumerated Suit values
@@ -1237,8 +1306,8 @@ public class Phase3
          private Suit suit;
 
          /**
-          * Error flag, keeps track of invalid entries. If true, the card object does not
-          * have valid data
+          * Error flag, keeps track of invalid entries. If true, the card object
+          * does not have valid data
           */
          private boolean errorFlag;
 
@@ -1272,7 +1341,8 @@ public class Phase3
             if (errorFlag == true) // Card does not contain valid data
             {
                return "** illegal **"; // Returns an error message
-            } else
+            } 
+            else
             {
                // Get char value, convert to string, and store in variable
                String returnValue = String.valueOf(getValue());
@@ -1377,8 +1447,9 @@ public class Phase3
                return true;
             }
 
-            if (obj == null || getClass() != obj.getClass() || this.value != other.value
-                  || this.errorFlag != other.errorFlag || this.suit != other.suit)
+            if (obj == null || getClass() != obj.getClass()
+               || this.value != other.value || this.errorFlag != other.errorFlag
+               || this.suit != other.suit)
             {
                return false;
             }
@@ -1430,7 +1501,8 @@ public class Phase3
             quickSort(cards, 0, arraySize - 1);
 
             // End timer, display sort time.
-            System.out.println("Sort complete. Took " + ((System.nanoTime() - startTime) / 100000) + " ms.");
+            System.out.println("Sort complete. Took "
+               + ((System.nanoTime() - startTime) / 100000) + " ms.");
 
          }
 
@@ -1444,7 +1516,8 @@ public class Phase3
           * @param upperNdx
           *           The ending index to sort to.
           */
-         private static void quickSort(Card[] cardArray, int lowerNdx, int upperNdx)
+         private static void quickSort(Card[] cardArray, int lowerNdx,
+            int upperNdx)
          {
             // Return if this section is already sorted.
             if (lowerNdx >= upperNdx)
@@ -1564,7 +1637,7 @@ public class Phase3
           */
          public boolean takeCard(Card card)
          {
-            
+
             if (numCards < MAX_CARDS)
             {
                // Makes copy of new card and stores in index. & Increments
@@ -1572,15 +1645,15 @@ public class Phase3
 
                // Resize array with non-null cards.
                Card[] tempHand = myCards;
-               myCards = new Card[numCards+1];
-               for(int i = 0; i < numCards; i++)
-               {                    
+               myCards = new Card[numCards + 1];
+               for (int i = 0; i < numCards; i++)
+               {
                   myCards[i] = tempHand[i];
                }
-               
+
                // Add new card to hand.
                myCards[numCards++] = new Card(card.getValue(), card.getSuit());
-               
+
                if (numCards == MAX_CARDS) // The hand is full
                {
                   return false;
@@ -1590,7 +1663,8 @@ public class Phase3
          }
 
          /**
-          * Returns and removes the card in the top occupied position of the array
+          * Returns and removes the card in the top occupied position of the
+          * array
           * 
           * @parm cardIndex the index of the card that will be played
           * @return the top card
@@ -1630,7 +1704,8 @@ public class Phase3
             if (numCards == 0) // There are no cards in the hand
             {
                return "\nHand = (  )";
-            } else // There are cards in the hand
+            } 
+            else // There are cards in the hand
             {
                String returnVal = "\nHand = ( ";
 
@@ -1663,8 +1738,8 @@ public class Phase3
          }
 
          /**
-          * Accessor for an individual card. Returns a card with errorFlag = true if k is
-          * bad
+          * Accessor for an individual card. Returns a card with errorFlag =
+          * true if k is bad
           * 
           * @param k
           *           the index of the card in the array
@@ -1733,12 +1808,13 @@ public class Phase3
          }
 
          /**
-          * Creates a masterPack of 52 unique cards with all the valid possible unique
-          * combinations of the card values and suits Checks to ensure that it has not
-          * been called before by checking if masterPack instance variable array was
-          * already initialized. It does not execute if masterPack was already
-          * initialized. note if masterPack[] contains only null values, it contains no
-          * objects and therefore must not have been initialized.
+          * Creates a masterPack of 52 unique cards with all the valid possible
+          * unique combinations of the card values and suits Checks to ensure
+          * that it has not been called before by checking if masterPack
+          * instance variable array was already initialized. It does not execute
+          * if masterPack was already initialized. note if masterPack[] contains
+          * only null values, it contains no objects and therefore must not have
+          * been initialized.
           */
          private static void allocateMasterPack()
          {
@@ -1749,7 +1825,8 @@ public class Phase3
                                                      // initialized
             {
                return;
-            } else // masterPack was not initialized
+            } 
+            else // masterPack was not initialized
             {
                // Assign cards with all unique combos of suits & values to
                // masterPack
@@ -1757,7 +1834,8 @@ public class Phase3
                {
                   for (char validCardValue : Card.valueRanks)
                   {
-                     masterPack[masterPackIndex] = new Card(validCardValue, suit);
+                     masterPack[masterPackIndex] = new Card(validCardValue,
+                        suit);
                      masterPackIndex++;
                   }
                }
@@ -1765,8 +1843,8 @@ public class Phase3
          }
 
          /**
-          * Method initializes the array of cards with amount equal to value in the
-          * argument.
+          * Method initializes the array of cards with amount equal to value in
+          * the argument.
           * 
           * @param numPacks
           *           amount of packs to be in the cards array
@@ -1829,7 +1907,8 @@ public class Phase3
           * 
           * @param k
           *           index of the card to be inspected
-          * @Returns an error card if the card is bad Else returns the card as it is
+          * @Returns an error card if the card is bad Else returns the card as
+          *          it is
           */
          public Card inspectCard(int k)
          {
@@ -1856,8 +1935,8 @@ public class Phase3
          }
 
          /**
-          * Puts the card on the top of the deck, if there there are not too many
-          * instances of the card in the deck
+          * Puts the card on the top of the deck, if there there are not too
+          * many instances of the card in the deck
           * 
           * @param card
           *           the card to be added
@@ -1873,8 +1952,8 @@ public class Phase3
          }
 
          /**
-          * Removes a specific card from the deck. Puts the current top card into its
-          * place.
+          * Removes a specific card from the deck. Puts the current top card
+          * into its place.
           * 
           * @param card
           *           the card to be removed
@@ -1904,132 +1983,135 @@ public class Phase3
 
 }// end of Phase1
 
-//BEGIN PHASE2 --------------------------------------------------------------
+// BEGIN PHASE2 --------------------------------------------------------------
 class MyClock extends JPanel
 {
 
-// member variables
-private JPanel panel;
-private JLabel timeClockLabel = new JLabel("0");
-private int seconds; // Holds the seconds counted in the clock
-private boolean runClock = true; // Holds True, if clock should keep running
-private JButton startButton;
-private JButton stopButton;
-// clock, else false to not have the clock run
-TimeClock clockThread = new TimeClock(); // Make time thread object
+   // member variables
+   private JPanel panel;
+   private JLabel timeClockLabel = new JLabel("0");
+   private int seconds; // Holds the seconds counted in the clock
+   private boolean runClock = true; // Holds True, if clock should keep running
+   private JButton startButton;
+   private JButton stopButton;
+   // clock, else false to not have the clock run
+   TimeClock clockThread = new TimeClock(); // Make time thread object
 
-// ---------- Listener class designed for TimeClock objects ----------------
-private class runTimerListener implements ActionListener
-{
-   public void actionPerformed(ActionEvent e)
+   // ---------- Listener class designed for TimeClock objects ----------------
+   private class runTimerListener implements ActionListener
    {
-      // Stops the clock if started, and starts it if stopped
-      clockThread.toggleTimer();
+      public void actionPerformed(ActionEvent e)
+      {
+         // Stops the clock if started, and starts it if stopped
+         clockThread.toggleTimer();
+      }
+   }// End of runTimeListener inner class
+
+   // Default constructor implements the GUI
+   public MyClock()
+   {
+
+      // Starts the thread time and calls run
+      clockThread.start();
+
+      // Make a panel for the GUI
+      panel = new JPanel();
+      panel.setBackground(Color.BLACK);
+
+      // Add the panel to the GUI
+      add(panel);
+
+      // Make two button that will start / stop the timer
+      startButton = new JButton("START");
+      stopButton = new JButton("STOP");
+      startButton.setPreferredSize(new Dimension(80, 20));
+      stopButton.setPreferredSize(new Dimension(80, 20));
+
+      startButton.setForeground(Color.RED);
+      stopButton.setForeground(Color.RED);
+
+      // Assign special access listener to the button
+      startButton.addActionListener(new runTimerListener());
+
+      stopButton.addActionListener(new runTimerListener());
+      startButton.setVisible(false);
+
+      panel.add(startButton); // add button to panel
+      panel.add(stopButton); // add button to panel
+      timeClockLabel.setForeground(Color.red);
+      panel.add(timeClockLabel); // add the label to panel
+
    }
-}// End of runTimeListener inner class
 
-// Default constructor implements the GUI
-public MyClock()
-{
-
-   // Starts the thread time and calls run
-   clockThread.start();
-
-   // Make a panel for the GUI
-   panel = new JPanel();
-   panel.setBackground(Color.BLACK);
-
-   // Add the panel to the GUI
-   add(panel);
-
-   // Make two button that will start / stop the timer
-   startButton = new JButton("START");
-   stopButton = new JButton("STOP");
-   startButton.setPreferredSize(new Dimension(80, 20));
-   stopButton.setPreferredSize(new Dimension(80, 20));
-
-   startButton.setForeground(Color.RED);
-   stopButton.setForeground(Color.RED);
-
-   // Assign special access listener to the button
-   startButton.addActionListener(new runTimerListener());
-
-   stopButton.addActionListener(new runTimerListener());
-   startButton.setVisible(false);
-
-   panel.add(startButton); // add button to panel
-   panel.add(stopButton); // add button to panel
-   timeClockLabel.setForeground(Color.red);
-   panel.add(timeClockLabel); // add the label to panel
-
-}
-
-// --------------------- TimeClock class --------------------------------
-private class TimeClock extends Thread
-{
-   /**
-    * Run method for the thread
-    */
-   public void run()
+   // --------------------- TimeClock class --------------------------------
+   private class TimeClock extends Thread
    {
-      while (true)
+      /**
+       * Run method for the thread
+       */
+      public void run()
+      {
+         while (true)
+         {
+            if (runClock)
+            {
+               // Changes the value of the label to represent the seconds
+               timeClockLabel.setText(
+                  String.format("%d:%02d", seconds / 60, seconds % 60));
+               seconds++; // Increment the seconds value
+               doNothing(1000); // Do nothing for one full second
+            } 
+            else
+            {
+               doNothing(0); // Do nothing
+            }
+         }
+      }
+
+      /**
+       * Helper method will pause thread for amount of milliseconds given in
+       * argument
+       * 
+       * @param :
+       *           int milliseconds to pause program for
+       */
+      public void doNothing(int milliseconds)
+      {
+         try
+         {
+            Thread.sleep(milliseconds);
+         } 
+         catch (InterruptedException e)
+         {
+            System.out.println("Unexpected interrupt!");
+            System.exit(0);
+         }
+      }
+
+      /**
+       * Helper method
+       * 
+       * Toggles (flips) the value of runClock variable.
+       */
+      public void toggleTimer()
       {
          if (runClock)
          {
-            // Changes the value of the label to represent the seconds
-            timeClockLabel.setText(
-                  String.format("%d:%02d", seconds / 60, seconds % 60));
-            seconds++; // Increment the seconds value
-            doNothing(1000); // Do nothing for one full second
-         } else
+            stopButton.setVisible(false);
+            runClock = false;
+            startButton.setVisible(true);
+         } 
+         else
          {
-            doNothing(0); // Do nothing
+            startButton.setVisible(false);
+            runClock = true;
+            stopButton.setVisible(true);
+
          }
-      }
-   }
-
-   /**
-    * Helper method will pause thread for amount of milliseconds given in
-    * argument
-    * 
-    * @param :
-    *           int milliseconds to pause program for
-    */
-   public void doNothing(int milliseconds)
-   {
-      try
-      {
-         Thread.sleep(milliseconds);
-      } catch (InterruptedException e)
-      {
-         System.out.println("Unexpected interrupt!");
-         System.exit(0);
-      }
-   }
-
-   /**
-    * Helper method
-    * 
-    * Toggles (flips) the value of runClock variable.
-    */
-   public void toggleTimer()
-   {
-      if (runClock)
-      {
-         stopButton.setVisible(false);
-         runClock = false;
-         startButton.setVisible(true);
-      } else
-      {
-         startButton.setVisible(false);
-         runClock = true;
-         stopButton.setVisible(true);
 
       }
 
-   }
-
-} // End of TimeClock thread class
+   } // End of TimeClock thread class
 
 } // END OF MyClock class
-// END PHASE2 --------------------------------------------------------------
+  // END PHASE2 --------------------------------------------------------------
