@@ -3,7 +3,7 @@
  * CLASS CST 338
  * Team MakeSmart
  * Assignment 6, Module 6
- * PHASE 2 MVC
+ * PHASE 3
  * 
  * PROGRAM DESCRIPTION
  * 
@@ -39,9 +39,7 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-//---------------------- BEGIN PHASE1 -----------------------------------
-//
-//Phase1 includes classes: Controller, CardView, CardModel
+// ----------------- class Phase3  ---------------------------------------
 public class Phase3
 {
 
@@ -63,11 +61,7 @@ public class Phase3
       Controller.startTheGame();
    }
 
-   // -----------------------------------------------------------------
-   // -----------------------------------------------------------------
-   // -----------------------------------------------------------------
-   // --------------------start of class Controller--------------------
-
+   // -------------------- class Controller--------------------
    // class Controller controls the game
    static class Controller
    {
@@ -320,8 +314,6 @@ public class Phase3
                System.out.println("No card selected.");
             }
          }
-         // System.out.println(buildCardGame.getHand(1).toString());
-
       }
 
       /**
@@ -464,9 +456,7 @@ public class Phase3
                      humanLabels[i].setIcon(humanLabels[i + 1].getIcon());
                   }
                }
-
             }
-
          }
       }
 
@@ -503,7 +493,6 @@ public class Phase3
        */
       private static void checkWinner(int playerID, boolean skipped)
       {
-
          // make sure both cards have been played
          if (skipped)
          {
@@ -528,7 +517,6 @@ public class Phase3
                      displayWinner();
                   }
                }
-
                UpdatePlayedCardsGUI();
             }
          } 
@@ -577,14 +565,12 @@ public class Phase3
                      cardsClickable = true;
                      skipButton.setEnabled(true);
                   }
-
                }
             });
 
             timer.setRepeats(false);
             timer.start();
          }
-
       }
 
       /**
@@ -608,7 +594,6 @@ public class Phase3
          // create an new object of CardView.DisplayWinner
          winner = new CardView.DisplayWinner(stringWinner);
          bottomPanel.add(winner, BorderLayout.CENTER);
-
       }
 
       /**
@@ -620,13 +605,10 @@ public class Phase3
       {
          bottomPanel = new JPanel();
          bottomPanel.setLayout(new BorderLayout());
-
          JPanel subBottom = new JPanel();
          JPanel subUpper = new JPanel();
          subUpper.setLayout(new BorderLayout());
-
          subUpper.add(new MyClock(), BorderLayout.WEST);
-
          subUpper.setBackground(Color.BLUE);
          bottomPanel.setBackground(Color.black);
          subBottom.setBackground(Color.BLUE);
@@ -672,11 +654,12 @@ public class Phase3
          buttonsPanel.setBorder(new EmptyBorder(30, 80, 50, 80));
          buttonsPanel.add(restartButton);
          buttonsPanel.add(exitButton);
+         
+         //set components to visible
          restartButton.setVisible(false);
          exitButton.setVisible(false);
-
          bottomPanel.add(buttonsPanel, BorderLayout.CENTER);
-
+         
          return bottomPanel;
       }
 
@@ -690,10 +673,8 @@ public class Phase3
       {
          cardsClickable = false;
          skipButton.setEnabled(false);
-
          selectedCard = null;
          selectedCardIndex = -1;
-
          UpdatePlayedCardsGUI();
          checkWinner(1, true);
       }
@@ -723,7 +704,6 @@ public class Phase3
                Controller.score[0] = 0;
                computerPlaysFirst = true;
                Controller.startTheGame();
-
             }
          }
       }
@@ -737,7 +717,6 @@ public class Phase3
       private static void exitButtonAction(ActionEvent evt)
       {
          String str = evt.getActionCommand();
-
          if (str.equals("Exit"))
          {
             System.exit(0);
@@ -1006,11 +985,7 @@ public class Phase3
    }
    // end of controller
 
-   // ________________________________________________________________________
-   // ________________________________________________________________________
-   // ________________________________________________________________________
-   // ____________________start of
-   // CardView________________________________________________
+   // ----------------class CardView -----------------------------------------
    static class CardView
    {
       /**
@@ -1270,13 +1245,9 @@ public class Phase3
       }
 
    }// end of CardView class
-    // ________________________________________________________________________
-    // ________________________________________________________________________
-    // ________________________________________________________________________
-    // __________________start of CardModel____________________________________
 
+    // -------------------- class CardModel ---------------------------------
    /**
-    * 
     * Class CardModel includes the three classes Card, Hand and Deck
     */
    static class CardModel
@@ -1981,9 +1952,9 @@ public class Phase3
 
    }// end of CardModel
 
-}// end of Phase1
+}// end of Phase3
 
-// BEGIN PHASE2 --------------------------------------------------------------
+// -------------class MyClock ------------------------------------------------
 class MyClock extends JPanel
 {
 
@@ -2043,7 +2014,7 @@ class MyClock extends JPanel
 
    }
 
-   // --------------------- TimeClock class --------------------------------
+   // --------------------- class TimeClock  --------------------------------
    private class TimeClock extends Thread
    {
       /**
@@ -2106,12 +2077,9 @@ class MyClock extends JPanel
             startButton.setVisible(false);
             runClock = true;
             stopButton.setVisible(true);
-
          }
-
       }
 
    } // End of TimeClock thread class
 
 } // END OF MyClock class
-  // END PHASE2 --------------------------------------------------------------
